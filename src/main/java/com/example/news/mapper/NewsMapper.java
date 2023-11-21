@@ -2,6 +2,7 @@ package com.example.news.mapper;
 
 import com.example.news.entity.News;
 import com.example.news.model.request.UpsetNewsRequest;
+import com.example.news.model.response.News3Response;
 import com.example.news.model.response.NewsListResponse;
 import com.example.news.model.response.NewsResponse;
 import org.mapstruct.DecoratedWith;
@@ -11,7 +12,7 @@ import org.mapstruct.ReportingPolicy;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@DecoratedWith(NewsMapperDelegate.class)
+@DecoratedWith(NewsMapperDel.class)
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface NewsMapper {
 
@@ -25,8 +26,8 @@ public interface NewsMapper {
     default NewsListResponse clientListToClientResponseList(List<News> news) {
         NewsListResponse response = new NewsListResponse();
         response.setNewsResponseList(news.stream()
-                .map(this::newsToResponse).collect(Collectors.toList()));
+                .map(this::oneNewsToResponses).collect(Collectors.toList()));
         return response;
     }
-
+    News3Response oneNewsToResponses(News news);
 }

@@ -7,8 +7,6 @@ import org.mapstruct.DecoratedWith;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
-import org.springframework.stereotype.Component;
-
 import java.util.List;
 
 @DecoratedWith(CategoryMapperDelegate.class)

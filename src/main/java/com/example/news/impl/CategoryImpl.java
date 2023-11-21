@@ -52,4 +52,6 @@ public class CategoryImpl implements CategoryService {
     public List<Category> findAll() throws EntityNotFoundException{
         return categoryRepository.findAll();
     }
+
+
 }
