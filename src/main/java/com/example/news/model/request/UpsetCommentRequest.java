@@ -13,6 +13,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UpsetCommentRequest {
+
+    private Long id;
+
     @NotEmpty(message = "Заголовок комментария не может быть пустым!")
     private String name;
 

@@ -18,6 +18,7 @@ public abstract class CommentMapperDelegate implements CommentMapper {
     @Override
     public Comment requestToComment(UpsetCommentRequest request) throws EntityNotFoundException {
         Comment comment = new Comment();
+        comment.setId(request.getId());
         comment.setName(request.getName());
         comment.setText(request.getText());
         comment.setNews(newsService.findById(request.getNewsId()));
