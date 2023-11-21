@@ -2,6 +2,7 @@ package com.example.news.mapper;
 
 import com.example.news.entity.News;
 import com.example.news.model.request.UpsetNewsRequest;
+import com.example.news.model.response.News2Response;
 import com.example.news.model.response.NewsListResponse;
 import com.example.news.model.response.NewsResponse;
 import org.mapstruct.DecoratedWith;
@@ -28,5 +29,5 @@ public interface NewsMapper {
                 .map(this::newsToResponse).collect(Collectors.toList()));
         return response;
     }
-
+    News2Response oneNewsToResponse(News news);
 }

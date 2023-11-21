@@ -1,9 +1,11 @@
 package com.example.news.controller;
 
 import com.example.news.entity.User;
+import com.example.news.exeption.EntityNotFoundException;
 import com.example.news.mapper.UserMapper;
 import com.example.news.model.request.UpsetUserRequest;
 import com.example.news.model.response.UserListResponse;
+import com.example.news.model.response.UserOne;
 import com.example.news.model.response.UserResponse;
 import com.example.news.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +34,11 @@ public class UserController {
         return ResponseEntity.ok(userMapper.userToResponse(user));
     }
 
-
+    @GetMapping("/{id}")
+    public ResponseEntity<UserOne> getUser(@PathVariable Long id) {
+        User user = userService.findUserById(id)
+                .orElseThrow(() -> new EntityNotFoundException("User not found with id: " + id));
+        return ResponseEntity.ok(userMapper.userToOneResponse(user));
+    }
 
 }

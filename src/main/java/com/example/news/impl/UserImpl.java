@@ -25,7 +25,7 @@ public class UserImpl implements UserService {
 
     @Override
     public Optional<User> findUserById(Long id) {
-        return Optional.of(userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Не удалось найти пользователя")));
+        return Optional.of(userRepository.findByIdWithCategories(id).orElseThrow(() -> new EntityNotFoundException("Не удалось найти пользователя")));
     }
 
     @Override

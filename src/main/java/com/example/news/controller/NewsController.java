@@ -3,6 +3,7 @@ package com.example.news.controller;
 import com.example.news.entity.News;
 import com.example.news.mapper.NewsMapper;
 import com.example.news.model.request.UpsetNewsRequest;
+import com.example.news.model.response.News2Response;
 import com.example.news.model.response.NewsListResponse;
 import com.example.news.model.response.NewsResponse;
 import com.example.news.service.NewsService;
@@ -27,6 +28,11 @@ public class NewsController {
     public ResponseEntity<NewsResponse> create(@RequestBody UpsetNewsRequest request) {
         News news = newsService.save(newsMapper.requestToNews(request));
         return ResponseEntity.ok(newsMapper.newsToResponse(news));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<News2Response> getOneNews(@PathVariable Long id) {
+        return ResponseEntity.ok(newsMapper.oneNewsToResponse(newsService.findById(id)));
     }
 
 }

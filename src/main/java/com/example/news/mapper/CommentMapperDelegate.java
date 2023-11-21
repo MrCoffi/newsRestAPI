@@ -3,7 +3,6 @@ package com.example.news.mapper;
 import com.example.news.entity.Comment;
 import com.example.news.exeption.EntityNotFoundException;
 import com.example.news.model.request.UpsetCommentRequest;
-import com.example.news.service.CommentService;
 import com.example.news.service.NewsService;
 import com.example.news.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
