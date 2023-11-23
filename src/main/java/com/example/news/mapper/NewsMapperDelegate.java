@@ -3,11 +3,13 @@ package com.example.news.mapper;
 import com.example.news.entity.News;
 import com.example.news.model.request.UpsetNewsRequest;
 import com.example.news.model.response.News3Response;
+
 import com.example.news.service.CategoryService;
 import com.example.news.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 
-public abstract class NewsMapperDel implements NewsMapper {
+public abstract class NewsMapperDelegate implements NewsMapper {
     @Autowired
     private CategoryService categoryService;
     @Autowired
@@ -29,14 +31,21 @@ public abstract class NewsMapperDel implements NewsMapper {
         return news;
     }
 
+
     @Override
     public News3Response oneNewsToResponses(News news) {
         News3Response news2Response = new News3Response();
-        news2Response.setCommentSize((long) news.getComment().size());
+        if (news.getComment() == null) {
+            news2Response.setCommentSize(0L);
+        } else {
+            news2Response.setCommentSize((long) news.getComment().size());
+        }
+        System.out.println(123);
         news2Response.setName(news.getName());
         news2Response.setId(news.getId());
         news2Response.setCategoryName(news.getCategory().getName());
         news2Response.setCreator(news.getCategory().getUser().getName());
         return news2Response;
     }
+
 }

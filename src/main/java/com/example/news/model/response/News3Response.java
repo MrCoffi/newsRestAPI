@@ -1,5 +1,6 @@
 package com.example.news.model.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 @Data

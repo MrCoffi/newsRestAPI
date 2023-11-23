@@ -20,4 +20,6 @@ public interface NewsService {
     void deleteById(Long id);
 
     List<News> findNewsByCategoryName(String name);
+
+
 }

@@ -9,10 +9,11 @@ import org.mapstruct.DecoratedWith;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
-@DecoratedWith(NewsMapperDel.class)
+@DecoratedWith(NewsMapperDelegate.class)
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface NewsMapper {
 
@@ -23,11 +24,12 @@ public interface NewsMapper {
 
     NewsResponse newsToResponse(News news);
 
+    News3Response oneNewsToResponses(News news);
+
     default NewsListResponse clientListToClientResponseList(List<News> news) {
         NewsListResponse response = new NewsListResponse();
         response.setNewsResponseList(news.stream()
                 .map(this::oneNewsToResponses).collect(Collectors.toList()));
         return response;
     }
-    News3Response oneNewsToResponses(News news);
 }

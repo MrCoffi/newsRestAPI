@@ -26,7 +26,7 @@ public class NewsImpl implements NewsService {
     }
 
     @Override
-    public News findById(Long id) throws EntityNotFoundException{
+    public News findById(Long id) throws EntityNotFoundException {
         return newsRepository.findById(id).orElseThrow();
     }
 
@@ -39,19 +39,20 @@ public class NewsImpl implements NewsService {
     }
 
     @Override
-    public News update(News news) throws UpdateStateException{
+    public News update(News news) throws UpdateStateException {
         News updateNews = new News();
         updateNews.setName(news.getName());
         return newsRepository.save(updateNews);
     }
 
     @Override
-    public void deleteById(Long id) throws UpdateStateException{
+    public void deleteById(Long id) throws UpdateStateException {
         newsRepository.deleteById(id);
     }
 
     @Override
-    public List<News> findNewsByCategoryName(String name) throws EntityNotFoundException{
+    public List<News> findNewsByCategoryName(String name) throws EntityNotFoundException {
         return newsRepository.findNewsByCategoryName(name);
     }
+
 }

@@ -24,9 +24,9 @@ public class NewsController {
     }
 
     @PostMapping
-    public ResponseEntity<NewsResponse> create(@RequestBody UpsetNewsRequest request) {
+    public ResponseEntity<News3Response> create(@RequestBody UpsetNewsRequest request) {
         News news = newsService.save(newsMapper.requestToNews(request));
-        return ResponseEntity.ok(newsMapper.newsToResponse(news));
+        return ResponseEntity.ok(newsMapper.oneNewsToResponses(news));
     }
 
     @GetMapping("/{id}")

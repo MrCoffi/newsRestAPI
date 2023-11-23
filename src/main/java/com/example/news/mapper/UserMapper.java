@@ -30,6 +30,4 @@ public interface UserMapper {
                 .map(this::userToResponse).collect(Collectors.toList()));
         return response;
     }
-
-
 }
