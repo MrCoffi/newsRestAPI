@@ -5,7 +5,6 @@ import com.example.news.mapper.NewsMapper;
 import com.example.news.model.request.UpsetNewsRequest;
 import com.example.news.model.response.News3Response;
 import com.example.news.model.response.NewsListResponse;
-import com.example.news.model.response.NewsResponse;
 import com.example.news.service.NewsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

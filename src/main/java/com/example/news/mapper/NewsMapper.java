@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @DecoratedWith(NewsMapperDelegate.class)
-@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE, uses = NewsMapperDelegate.class)
 public interface NewsMapper {
 
     News requestToNews(UpsetNewsRequest request);

@@ -23,9 +23,10 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<UserListResponse> findAll() {
+        List<User> users = userService.findAll();
+        UserListResponse userListResponses = userMapper.clientListToClientResponseList(users);
 
-        return ResponseEntity.ok().body(
-                userMapper.clientListToClientResponseList(userService.findAll()));
+        return ResponseEntity.ok().body(userListResponses);
     }
 
     @PostMapping
