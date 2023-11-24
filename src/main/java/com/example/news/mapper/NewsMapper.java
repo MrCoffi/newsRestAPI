@@ -2,7 +2,11 @@ package com.example.news.mapper;
 
 import com.example.news.entity.News;
 import com.example.news.model.request.UpsetNewsRequest;
+<<<<<<<<< Temporary merge branch 1
+import com.example.news.model.response.News2Response;
+=========
 import com.example.news.model.response.News3Response;
+>>>>>>>>> Temporary merge branch 2
 import com.example.news.model.response.NewsListResponse;
 import com.example.news.model.response.NewsResponse;
 import org.mapstruct.DecoratedWith;
