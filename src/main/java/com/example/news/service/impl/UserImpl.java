@@ -1,4 +1,4 @@
-package com.example.news.impl;
+package com.example.news.service.impl;
 
 import com.example.news.entity.User;
 import com.example.news.exeption.EntityNotFoundException;
@@ -6,17 +6,19 @@ import com.example.news.exeption.UpdateStateException;
 import com.example.news.repository.UserRepository;
 import com.example.news.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
+@Transactional
 public class UserImpl implements UserService {
     private final UserRepository userRepository;
+
 
     @Override
     public Optional<User> findUsersByName(String name) throws EntityNotFoundException {
@@ -25,13 +27,14 @@ public class UserImpl implements UserService {
 
     @Override
     public Optional<User> findUserById(Long id) {
-        return Optional.of(userRepository.findByIdWithCategories(id).orElseThrow(() -> new EntityNotFoundException("Не удалось найти пользователя")));
+        return Optional.of(userRepository.findByIdWithCategories(id).orElseThrow(()
+                -> new EntityNotFoundException("Не удалось найти пользователя")));
     }
 
     @Override
-    @Transactional
-    public List<User> findAll() throws EntityNotFoundException {
-        return userRepository.findAll();
+    public List<User> findAll(Integer pageNumber,Integer pageSize) throws EntityNotFoundException {
+        return userRepository
+                .findAllWithCategoriesAndNews(PageRequest.of(pageNumber,pageSize)).getContent();
     }
 
     @Override
@@ -47,9 +50,12 @@ public class UserImpl implements UserService {
         return userRepository.save(user);
     }
 
-    @Transactional
     @Override
     public void delete(Long id) throws UpdateStateException {
-        userRepository.deleteUserById(id);
+        Optional<User> userOptional = userRepository.findById(id);
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            userRepository.delete(user);
+        }
     }
 }

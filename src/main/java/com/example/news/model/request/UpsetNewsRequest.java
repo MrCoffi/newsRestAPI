@@ -12,6 +12,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UpsetNewsRequest {
+    private Long id;
     @NotEmpty(message = "Заголовок не может быть пустой!")
     private String name;
     @NotEmpty(message = "Новость не может быть пустой!")

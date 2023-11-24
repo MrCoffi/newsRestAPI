@@ -1,4 +1,4 @@
-package com.example.news.impl;
+package com.example.news.service.impl;
 
 import com.example.news.entity.Category;
 import com.example.news.entity.User;
@@ -8,6 +8,7 @@ import com.example.news.repository.CategoryRepository;
 import com.example.news.service.CategoryService;
 import com.example.news.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,22 +27,22 @@ public class CategoryImpl implements CategoryService {
     }
 
     @Override
-    public Category findCategoryByName(String name) throws EntityNotFoundException{
+    public Category findCategoryByName(String name) throws EntityNotFoundException {
         return categoryRepository.findCategoriesByName(name);
     }
 
     @Override
-    public Category findCategoryById(Long id) throws EntityNotFoundException{
+    public Category findCategoryById(Long id) throws EntityNotFoundException {
         return categoryRepository.findById(id).orElseThrow();
     }
 
     @Override
-    public List<Category> findCategoryByUserId(User user) throws EntityNotFoundException{
+    public List<Category> findCategoryByUserId(User user) throws EntityNotFoundException {
         return categoryRepository.findCategoriesByUserId(user.getId());
     }
 
     @Override
-    public Category save(Category category) throws UpdateStateException{
+    public Category save(Category category) throws UpdateStateException {
         User user = userServiceImpl.findUserById(category.getUser().getId()).orElseThrow();
         category.setUser(user);
         user.getCategories().add(category);
@@ -49,8 +50,16 @@ public class CategoryImpl implements CategoryService {
     }
 
     @Override
-    public List<Category> findAll() throws EntityNotFoundException{
-        return categoryRepository.findAll();
+    public List<Category> findAll(Integer pageNumber,Integer pageSize) throws EntityNotFoundException {
+        return categoryRepository.findAll(PageRequest.of(pageNumber,pageSize)).getContent();
+    }
+
+    @Override
+    public Category update(Category category) {
+        Category updateCategory = categoryRepository.findById(category.getId()).orElseThrow();
+        updateCategory.setName(category.getName());
+        categoryRepository.save(updateCategory);
+        return updateCategory;
     }
 
 

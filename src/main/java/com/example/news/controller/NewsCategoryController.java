@@ -1,19 +1,16 @@
 package com.example.news.controller;
 
 import com.example.news.entity.Category;
-import com.example.news.entity.User;
 import com.example.news.mapper.CategoryMapper;
 import com.example.news.model.request.UpsetCategoryRequest;
 import com.example.news.model.response.CategoryResponse;
+import com.example.news.model.response.UpdatedCategoryResponse;
 import com.example.news.service.CategoryService;
-import com.example.news.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/category")
@@ -28,11 +25,22 @@ public class NewsCategoryController {
         return ResponseEntity.ok(mapper.categoryToResponse(category));
     }
 
-    @GetMapping
-    public ResponseEntity<List<CategoryResponse>> getAll() {
-        return ResponseEntity.ok(mapper.categoryListToResponseList(categoryServices.findAll()));
+    @DeleteMapping("/{id}")
+    public ResponseEntity<CategoryResponse> delete(@PathVariable Long id) {
+        categoryServices.deleteCategoriesById(id);
+        return ResponseEntity.noContent().build();
     }
 
+    @PutMapping
+    public ResponseEntity<UpdatedCategoryResponse> update(@RequestBody UpsetCategoryRequest request) {
+        Category category = mapper.requestToCategory(request);
+        return ResponseEntity.ok(mapper.updatedCategoryToResponse(categoryServices.update(category)));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<CategoryResponse>> getAll(@RequestParam Integer pageNumber,@RequestParam Integer pageSize) {
+        return ResponseEntity.ok(mapper.categoryListToResponseList(categoryServices.findAll(pageNumber, pageSize)));
+    }
 
 
 }

@@ -1,16 +1,21 @@
-package com.example.news.impl;
+package com.example.news.service.impl;
 
 import com.example.news.entity.Category;
 import com.example.news.entity.News;
 import com.example.news.exeption.EntityNotFoundException;
 import com.example.news.exeption.UpdateStateException;
+import com.example.news.model.NewsFilter;
 import com.example.news.repository.NewsRepository;
+import com.example.news.repository.NewsSpecification;
 import com.example.news.service.NewsService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
 
 @RequiredArgsConstructor
 @Transactional
@@ -21,8 +26,8 @@ public class NewsImpl implements NewsService {
     private final CategoryImpl categoryImpl;
 
     @Override
-    public List<News> findAll() throws EntityNotFoundException {
-        return newsRepository.findAll();
+    public List<News> findAll(Integer pageNumber, Integer pageSize) throws EntityNotFoundException {
+        return newsRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
     }
 
     @Override
@@ -40,8 +45,10 @@ public class NewsImpl implements NewsService {
 
     @Override
     public News update(News news) throws UpdateStateException {
-        News updateNews = new News();
+        News updateNews = newsRepository.findById(news.getId()).orElseThrow();
         updateNews.setName(news.getName());
+        updateNews.setCategory(categoryImpl.findCategoryById(news.getCategory().getId()));
+        updateNews.setText(news.getText());
         return newsRepository.save(updateNews);
     }
 
@@ -51,8 +58,10 @@ public class NewsImpl implements NewsService {
     }
 
     @Override
-    public List<News> findNewsByCategoryName(String name) throws EntityNotFoundException {
-        return newsRepository.findNewsByCategoryName(name);
+    public List<News> filterBy(NewsFilter newsFilter) {
+        return newsRepository.findAll(NewsSpecification.withFilter(newsFilter),
+                PageRequest.of(newsFilter.getPageNumber(), newsFilter.getPageSize())).getContent();
     }
+
 
 }

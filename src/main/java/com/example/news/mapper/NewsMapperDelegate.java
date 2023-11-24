@@ -5,6 +5,7 @@ import com.example.news.model.request.UpsetNewsRequest;
 import com.example.news.model.response.News3Response;
 import com.example.news.model.response.NewsResponse;
 import com.example.news.service.CategoryService;
+import com.example.news.service.NewsService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
@@ -12,11 +13,15 @@ public abstract class NewsMapperDelegate implements NewsMapper {
     @Autowired
     private CategoryService categoryService;
 
+    @Autowired
+    private NewsService newsService;
+
     @Override
     public News requestToNews(UpsetNewsRequest request) {
         News news = new News();
         news.setName(request.getName());
         news.setText(request.getText());
+        news.setId(request.getId());
         news.setCategory(categoryService.findCategoryById(request.getCategoryId()));
         return news;
     }
@@ -32,31 +37,30 @@ public abstract class NewsMapperDelegate implements NewsMapper {
     @Override
     public News3Response oneNewsToResponses(News news) {
         News3Response news2Response = new News3Response();
+        if (news.getId() != null) {
+            news = newsService.findById(news.getId());
+
+            news2Response.setId(news.getId());
+        }
         if (news.getComment() == null) {
             news2Response.setCommentSize(0L);
         } else {
             news2Response.setCommentSize((long) news.getComment().size());
         }
+        if (news.getName() != null) {
+            news2Response.setName(news.getName());
+        }
 
-        news2Response.setName(news.getName());
-        news2Response.setId(news.getId());
-        news2Response.setCategoryName(news
-                .getCategory()
-                .getName());
-        news2Response.setCreator(news
-                .getCategory()
-                .getUser()
-                .getName());
-        return news2Response;
-    }
+        if (news.getCategory() != null && news.getCategory().getUser().getName() != null) {
+            news2Response.setCategoryName(news
+                    .getCategory()
+                    .getName());
 
-
-    @Override
-    public NewsResponse newsToResponse(News news) {
-        NewsResponse newsResponse = new NewsResponse();
-        newsResponse.setId(news.getId());
-        newsResponse.setText(news.getText());
-        newsResponse.setName(news.getName());
-        return newsResponse;
+            news2Response.setCreator(news
+                    .getCategory()
+                    .getUser()
+                    .getName());
+        }
+            return news2Response;
     }
 }

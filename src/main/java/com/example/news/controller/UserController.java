@@ -22,8 +22,8 @@ public class UserController {
     private final UserMapper userMapper;
 
     @GetMapping
-    public ResponseEntity<UserListResponse> findAll() {
-        List<User> users = userService.findAll();
+    public ResponseEntity<UserListResponse> findAll(@RequestParam Integer pageSize, @RequestParam Integer pageNumber) {
+        List<User> users = userService.findAll(pageNumber,pageSize);
         UserListResponse userListResponses = userMapper.clientListToClientResponseList(users);
 
         return ResponseEntity.ok().body(userListResponses);
@@ -42,4 +42,16 @@ public class UserController {
         return ResponseEntity.ok(userMapper.userToOneResponse(user));
     }
 
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<UserResponse> delete(@PathVariable Long id) {
+        userService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping()
+    public ResponseEntity<UserOne> update(@RequestBody UpsetUserRequest request) {
+        User user = userMapper.requestToUser(request);
+        userService.update(user);
+        return ResponseEntity.ok(userMapper.userToOneResponse(userService.update(user)));
+    }
 }

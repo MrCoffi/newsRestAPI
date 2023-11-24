@@ -22,6 +22,6 @@ public class News {
     private String text;
     @ManyToOne
     private Category category;
-    @OneToMany
+    @OneToMany(mappedBy = "news", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comment;
 }

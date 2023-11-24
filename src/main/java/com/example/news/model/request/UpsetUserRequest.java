@@ -11,6 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class UpsetUserRequest {
+    private Long id;
     @NotEmpty(message = "Имя пользователя не может быть пустым!")
     private String name;
 }

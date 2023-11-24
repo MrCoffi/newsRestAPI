@@ -2,9 +2,6 @@ package com.example.news.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.jpa.repository.EntityGraph;
-
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -19,7 +16,7 @@ public class Category {
     private Long id;
     private String name;
 
-    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "category", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<News> news;
 
     @ManyToOne

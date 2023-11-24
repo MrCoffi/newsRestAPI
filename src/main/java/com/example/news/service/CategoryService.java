@@ -18,6 +18,7 @@ public interface CategoryService {
 
     Category save(Category category);
 
-    List<Category> findAll();
+    List<Category> findAll(Integer pageNumber,Integer pageSize);
 
+    Category update(Category category);
 }

@@ -1,6 +1,7 @@
 package com.example.news.service;
 
 import com.example.news.entity.User;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 
 import java.util.List;
@@ -11,7 +12,7 @@ public interface UserService {
 
     Optional<User> findUserById(Long id);
 
-    List<User> findAll();
+    List<User> findAll(Integer pageNumber,Integer pageSize);
 
     User update(User user);
 

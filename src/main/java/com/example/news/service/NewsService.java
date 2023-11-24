@@ -1,14 +1,12 @@
 package com.example.news.service;
 
 import com.example.news.entity.News;
-import org.springframework.data.jpa.repository.EntityGraph;
-import org.springframework.stereotype.Service;
-
+import com.example.news.model.NewsFilter;
 import java.util.List;
 
 public interface NewsService {
 
-    List<News> findAll();
+    List<News> findAll(Integer pageNumber,Integer pageSize);
 
 
     News findById(Long id);
@@ -19,7 +17,7 @@ public interface NewsService {
 
     void deleteById(Long id);
 
-    List<News> findNewsByCategoryName(String name);
+    List<News> filterBy(NewsFilter newsFilter);
 
 
 }
