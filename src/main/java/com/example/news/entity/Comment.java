@@ -20,7 +20,8 @@ public class Comment {
     private String name;
 
     private String text;
-    @ManyToOne
+    @ManyToOne()
+    @JoinColumn(name = "news_id", referencedColumnName = "id", nullable = false)
     private News news;
 
     private Long userId;

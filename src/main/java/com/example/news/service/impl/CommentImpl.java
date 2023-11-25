@@ -31,7 +31,7 @@ public class CommentImpl implements CommentService {
 
     @Override
     @CommentUpdate
-    public Comment update(Comment comment, Long id) throws UpdateStateException{
+    public Comment update(Comment comment, Long id) throws UpdateStateException {
         try {
             Comment updateComment = commentRepository.findCommentById(comment.getId());
             updateComment.setName(comment.getName());
@@ -50,6 +50,11 @@ public class CommentImpl implements CommentService {
     @Override
     @CommentAop
     public void deleteById(Long id, Long userId) throws UpdateStateException {
-        commentRepository.deleteById(id);
+        Comment comment = commentRepository.findCommentById(id);
+        if (comment != null) {
+            News news = comment.getNews();
+            news.getComment().remove(comment);
+            commentRepository.delete(comment);
+        }
     }
 }

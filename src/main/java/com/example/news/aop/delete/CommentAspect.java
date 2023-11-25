@@ -33,5 +33,4 @@ public class CommentAspect {
         }
         throw new UpdateStateException("Вы не являетесь владельцем комментария!");
     }
-
 }

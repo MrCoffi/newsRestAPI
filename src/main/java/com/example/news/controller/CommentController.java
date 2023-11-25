@@ -41,11 +41,7 @@ public class CommentController {
 
     @DeleteMapping("/{commentId}/{userId}")
     public ResponseEntity<CommentResponse> delete(@PathVariable Long commentId, @PathVariable Long userId) {
-        try {
             commentService.deleteById(commentId, userId);
-        } catch (Exception e) {
-                throw new UpdateStateException("Вы не являетесь владельцем комментария.");
-        }
         return ResponseEntity.noContent().build();
     }
 }

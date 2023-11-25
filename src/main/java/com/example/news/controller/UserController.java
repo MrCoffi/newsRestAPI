@@ -9,10 +9,10 @@ import com.example.news.model.response.UserOne;
 import com.example.news.model.response.UserResponse;
 import com.example.news.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/user")
@@ -23,16 +23,16 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<UserListResponse> findAll(@RequestParam Integer pageSize, @RequestParam Integer pageNumber) {
-        List<User> users = userService.findAll(pageNumber,pageSize);
-        UserListResponse userListResponses = userMapper.clientListToClientResponseList(users);
 
-        return ResponseEntity.ok().body(userListResponses);
+        return new ResponseEntity<UserListResponse>(userMapper.clientListToClientResponseList(
+                userService.findAll(pageNumber, pageSize)
+        ), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<UserResponse> create(@RequestBody UpsetUserRequest request) {
         User user = userService.save(userMapper.requestToUser(request));
-        return ResponseEntity.ok(userMapper.userToResponse(user));
+        return new ResponseEntity<UserResponse>(userMapper.userToResponse(user), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
