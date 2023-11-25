@@ -16,7 +16,6 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
     List<Category> findCategoriesByUserId(Long id);
 
     @Override
-    @EntityGraph(attributePaths = {"news"})
     Page<Category> findAll(Pageable pageable);
 
 }

@@ -11,8 +11,8 @@ import com.example.news.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -23,7 +23,7 @@ public class CommentImpl implements CommentService {
 
     @Override
     public Comment save(Comment comment) throws UpdateStateException {
-        News news = newsImpl.findById(comment.getNews().getId());
+        News news = newsImpl.findById(comment.getNews().getId()).orElseThrow();
         news.getComment().add(comment);
         comment.setNews(news);
         return commentRepository.save(comment);
@@ -32,14 +32,14 @@ public class CommentImpl implements CommentService {
     @Override
     @CommentUpdate
     public Comment update(Comment comment, Long id) throws UpdateStateException {
-        try {
-            Comment updateComment = commentRepository.findCommentById(comment.getId());
-            updateComment.setName(comment.getName());
-            updateComment.setText(comment.getText());
-            return commentRepository.save(updateComment);
-        } catch (Exception e) {
-            throw new EntityNotFoundException("Не удалось найти сущность");
+        Optional<Comment> existingComment = commentRepository.findCommentById(comment.getId());
+        if (existingComment.isPresent()) {
+            Comment updatedComment = existingComment.get();
+            updatedComment.setName(comment.getName());
+            updatedComment.setText(comment.getText());
+            return commentRepository.save(updatedComment);
         }
+        throw new EntityNotFoundException("Не удалось найти комментарий");
     }
 
     @Override
@@ -50,11 +50,12 @@ public class CommentImpl implements CommentService {
     @Override
     @CommentAop
     public void deleteById(Long id, Long userId) throws UpdateStateException {
-        Comment comment = commentRepository.findCommentById(id);
-        if (comment != null) {
-            News news = comment.getNews();
-            news.getComment().remove(comment);
-            commentRepository.delete(comment);
+        Optional<Comment> existComment = commentRepository.findCommentById(id);
+        if (existComment.isPresent()) {
+            Comment deleteComment = existComment.get();
+            News news = deleteComment.getNews();
+            news.getComment().remove(deleteComment);
+            commentRepository.delete(deleteComment);
         }
     }
 }

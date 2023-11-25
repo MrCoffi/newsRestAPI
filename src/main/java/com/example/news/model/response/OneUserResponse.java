@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserOne {
+public class OneUserResponse {
     private Long id;
 
     @NotEmpty(message = "Имя пользователя не может быть пустым!")

@@ -1,6 +1,5 @@
 package com.example.news.controller;
 
-import com.example.news.entity.Comment;
 import com.example.news.exeption.EntityNotFoundException;
 import com.example.news.exeption.UpdateStateException;
 import com.example.news.mapper.CommentMapper;
@@ -10,7 +9,7 @@ import com.example.news.model.response.CommentResponse;
 import com.example.news.service.CommentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,29 +18,31 @@ import org.springframework.web.bind.annotation.*;
 public class CommentController {
 
     private final CommentMapper commentMapper;
-
     private final CommentService commentService;
 
     @GetMapping
-    public ResponseEntity<CommentListResponse> get() throws EntityNotFoundException {
-        return ResponseEntity.ok(commentMapper.commentListToCommentResponseList(commentService.findAll()));
+    @ResponseStatus(HttpStatus.OK)
+    public CommentListResponse get() throws EntityNotFoundException {
+        return commentMapper.commentListToCommentResponseList(commentService.findAll());
     }
 
     @PostMapping
-    public ResponseEntity<CommentResponse> save(@RequestBody @Valid UpsetCommentRequest request) throws UpdateStateException{
-        Comment comment = commentService.save(commentMapper.requestToComment(request));
-        return ResponseEntity.ok(commentMapper.commentToResponse(comment));
+    @ResponseStatus(HttpStatus.OK)
+    public CommentResponse save(@RequestBody @Valid UpsetCommentRequest request) throws UpdateStateException{
+        return commentMapper.commentToResponse(
+                commentService.save(commentMapper.requestToComment(request)));
     }
 
     @PutMapping("/{userId}")
-    public ResponseEntity<CommentResponse> update(@RequestBody @Valid UpsetCommentRequest request, @PathVariable Long userId) throws UpdateStateException{
-        Comment comment = commentService.update(commentMapper.requestToComment(request),userId);
-        return ResponseEntity.ok(commentMapper.commentToResponse(comment));
+    @ResponseStatus(HttpStatus.UPGRADE_REQUIRED)
+    public CommentResponse update(@RequestBody @Valid UpsetCommentRequest request, @PathVariable Long userId) throws UpdateStateException{
+        return commentMapper.commentToResponse(
+                commentService.update(commentMapper.requestToComment(request),userId));
     }
 
     @DeleteMapping("/{commentId}/{userId}")
-    public ResponseEntity<CommentResponse> delete(@PathVariable Long commentId, @PathVariable Long userId) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long commentId, @PathVariable Long userId) {
             commentService.deleteById(commentId, userId);
-        return ResponseEntity.noContent().build();
     }
 }

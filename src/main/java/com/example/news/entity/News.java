@@ -22,6 +22,10 @@ public class News {
     private String text;
     @ManyToOne
     private Category category;
-    @OneToMany(mappedBy = "news", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "news", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Comment> comment;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }

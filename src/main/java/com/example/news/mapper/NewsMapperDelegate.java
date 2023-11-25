@@ -38,7 +38,7 @@ public abstract class NewsMapperDelegate implements NewsMapper {
     public News3Response oneNewsToResponses(News news) {
         News3Response news2Response = new News3Response();
         if (news.getId() != null) {
-            news = newsService.findById(news.getId());
+            news = newsService.findById(news.getId()).orElseThrow();
 
             news2Response.setId(news.getId());
         }
@@ -61,6 +61,6 @@ public abstract class NewsMapperDelegate implements NewsMapper {
                     .getUser()
                     .getName());
         }
-            return news2Response;
+        return news2Response;
     }
 }

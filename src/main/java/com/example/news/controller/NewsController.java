@@ -1,6 +1,6 @@
 package com.example.news.controller;
 
-import com.example.news.entity.News;
+import com.example.news.exeption.EntityNotFoundException;
 import com.example.news.mapper.NewsMapper;
 import com.example.news.model.NewsFilter;
 import com.example.news.model.request.UpsetNewsRequest;
@@ -9,8 +9,10 @@ import com.example.news.model.response.NewsListResponse;
 import com.example.news.model.response.NewsResponse;
 import com.example.news.service.NewsService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/news")
@@ -20,37 +22,43 @@ public class NewsController {
     private final NewsService newsService;
 
     @GetMapping("/filter")
-    public ResponseEntity<NewsListResponse> filterBy(NewsFilter newsFilter) {
-        return ResponseEntity.ok(newsMapper.clientListToClientResponseList(newsService.filterBy(newsFilter)));
+    @ResponseStatus(HttpStatus.OK)
+    public NewsListResponse filterBy(NewsFilter newsFilter) {
+        return newsMapper.clientListToClientResponseList(
+                newsService.filterBy(newsFilter));
     }
 
-
     @GetMapping
-    public ResponseEntity<NewsListResponse> getAll(@RequestParam Integer pageNumber, @RequestParam Integer pageSize) {
-        return ResponseEntity.ok(newsMapper.clientListToClientResponseList(newsService.findAll(pageNumber, pageSize)));
+    @ResponseStatus(HttpStatus.OK)
+    public NewsListResponse getAll(Pageable pageable) {
+        return newsMapper.clientListToClientResponseList(
+                newsService.findAll(pageable));
     }
 
     @PostMapping
-    public ResponseEntity<News3Response> create(@RequestBody UpsetNewsRequest request) {
-        News news = newsService.save(newsMapper.requestToNews(request));
-        return ResponseEntity.ok(newsMapper.oneNewsToResponses(news));
+    @ResponseStatus(HttpStatus.CREATED)
+    public News3Response create(@RequestBody UpsetNewsRequest request) {
+        return newsMapper.oneNewsToResponses(
+                newsService.save(newsMapper.requestToNews(request)));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<NewsResponse> delete(@PathVariable Long id) {
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long id) {
         newsService.deleteById(id);
-        return ResponseEntity.noContent().build();
     }
 
     @PutMapping
-    public ResponseEntity<NewsResponse> update(@RequestBody UpsetNewsRequest upsetNewsRequest) {
-        News news = newsMapper.requestToNews(upsetNewsRequest);
-        return ResponseEntity.ok(newsMapper.newsToResponse(newsService.update(news)));
+    @ResponseStatus(HttpStatus.UPGRADE_REQUIRED)
+    public NewsResponse update(@RequestBody UpsetNewsRequest upsetNewsRequest) {
+        return newsMapper.newsToResponse(
+                newsService.update(newsMapper.requestToNews(upsetNewsRequest)));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<NewsResponse> getOneNews(@PathVariable Long id) {
-
-        return ResponseEntity.ok(newsMapper.newsToResponse(newsService.findById(id)));
+    @ResponseStatus(HttpStatus.OK)
+    public Optional<NewsResponse> getOneNews(@PathVariable Long id) {
+        return Optional.ofNullable(Optional.of(newsMapper.newsToResponse(newsService.findById(id).orElseThrow()))
+                .orElseThrow(() -> new EntityNotFoundException("Не найдена новость")));
     }
 }

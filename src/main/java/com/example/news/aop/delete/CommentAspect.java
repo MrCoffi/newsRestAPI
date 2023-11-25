@@ -15,6 +15,9 @@ import org.aspectj.lang.annotation.Before;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
+import java.util.Optional;
+
 @Aspect
 @Service
 @RequiredArgsConstructor
@@ -27,9 +30,14 @@ public class CommentAspect {
         Object[] arguments = joinPoint.getArgs();
         Long commentId = (Long) arguments[0];
         Long userId = (Long) arguments[1];
-        Comment comment = commentRepository.findCommentById(commentId);
-        if (userId == comment.getUserId()) {
-            return;
+        Optional<Comment> existComment = commentRepository.findCommentById(commentId);
+        if (existComment.isPresent()) {
+            Comment comment = existComment.get();
+
+            if (Objects.equals(userId, comment.getUser().getId())) ;
+            {
+                return;
+            }
         }
         throw new UpdateStateException("Вы не являетесь владельцем комментария!");
     }

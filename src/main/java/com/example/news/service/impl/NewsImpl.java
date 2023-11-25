@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @RequiredArgsConstructor
@@ -26,13 +27,14 @@ public class NewsImpl implements NewsService {
     private final CategoryImpl categoryImpl;
 
     @Override
-    public List<News> findAll(Integer pageNumber, Integer pageSize) throws EntityNotFoundException {
-        return newsRepository.findAll(PageRequest.of(pageNumber, pageSize)).getContent();
+    public List<News> findAll(Pageable pageable) throws EntityNotFoundException {
+        return newsRepository.findAll(
+                PageRequest.of(pageable.getPageNumber(), pageable.getPageSize())).getContent();
     }
 
     @Override
-    public News findById(Long id) throws EntityNotFoundException {
-        return newsRepository.findById(id).orElseThrow();
+    public Optional<News> findById(Long id) throws EntityNotFoundException {
+        return newsRepository.findById(id);
     }
 
     @Override
@@ -62,6 +64,4 @@ public class NewsImpl implements NewsService {
         return newsRepository.findAll(NewsSpecification.withFilter(newsFilter),
                 PageRequest.of(newsFilter.getPageNumber(), newsFilter.getPageSize())).getContent();
     }
-
-
 }

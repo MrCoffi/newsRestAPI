@@ -24,5 +24,7 @@ public class Comment {
     @JoinColumn(name = "news_id", referencedColumnName = "id", nullable = false)
     private News news;
 
-    private Long userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }
