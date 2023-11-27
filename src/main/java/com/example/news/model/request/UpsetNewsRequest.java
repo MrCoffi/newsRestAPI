@@ -19,4 +19,7 @@ public class UpsetNewsRequest {
     private String text;
     @NotNull(message = "categoryId не может быть null ")
     private Long categoryId;
+
+    @NotNull(message = "userId не может быть null ")
+    private Long userId;
 }

@@ -6,6 +6,7 @@ import com.example.news.model.response.News3Response;
 import com.example.news.model.response.NewsResponse;
 import com.example.news.service.CategoryService;
 import com.example.news.service.NewsService;
+import com.example.news.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
@@ -16,6 +17,9 @@ public abstract class NewsMapperDelegate implements NewsMapper {
     @Autowired
     private NewsService newsService;
 
+    @Autowired
+    private UserService userService;
+
     @Override
     public News requestToNews(UpsetNewsRequest request) {
         News news = new News();
@@ -23,6 +27,7 @@ public abstract class NewsMapperDelegate implements NewsMapper {
         news.setText(request.getText());
         news.setId(request.getId());
         news.setCategory(categoryService.findCategoryById(request.getCategoryId()));
+        news.setUser(userService.findUserById(request.getUserId()).orElseThrow());
         return news;
     }
 

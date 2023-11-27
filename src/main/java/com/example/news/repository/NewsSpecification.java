@@ -9,18 +9,18 @@ import org.springframework.data.jpa.domain.Specification;
 
 public interface NewsSpecification {
     static Specification<News> withFilter(NewsFilter newsFilter) {
-
         return Specification.where(byUserName(newsFilter.getUserName()))
                 .and(byCategoryName(newsFilter.getCategoryName()));
     }
 
-     static Specification<News> byUserName(String userName) {
-        return (root, query, criteriaBuilder) -> {
+    static Specification<News> byUserName(String userName) {
+        return (root, query, cb) -> {
             if (userName == null) {
                 return null;
             }
+
             Join<News, User> userJoin = root.join("user");
-            return criteriaBuilder.equal(userJoin.get("name"), userName);
+            return cb.equal(userJoin.get("name"), userName);
         };
     }
 

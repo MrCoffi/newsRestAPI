@@ -161,12 +161,12 @@
 					"response": []
 				},
 				{
-					"name": "filteBy",
+					"name": "filteBycategoryName",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/news/filter?category=Тестовая категория&user=Новый пользователь 4&pageNumber=0&pageSize=10",
+							"raw": "http://localhost:8080/api/news/filter?categoryName=Тестовая категория 22&userName=Новый пользователь &pageNumber=0&pageSize=10",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -179,12 +179,12 @@
 							],
 							"query": [
 								{
-									"key": "category",
-									"value": "Тестовая категория"
+									"key": "categoryName",
+									"value": "Тестовая категория 22"
 								},
 								{
-									"key": "user",
-									"value": "Новый пользователь 4"
+									"key": "userName",
+									"value": "Новый пользователь "
 								},
 								{
 									"key": "pageNumber",
@@ -196,6 +196,22 @@
 								}
 							]
 						}
+					},
+					"response": []
+				},
+				{
+					"name": "filterByuserName",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "filterByCategoryAndUserName",
+					"request": {
+						"method": "GET",
+						"header": []
 					},
 					"response": []
 				}
@@ -269,7 +285,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\" :\"Сотая новость\",\r\n    \"text\" : \"Вчера ночью я спал\",\r\n    \"categoryId\":3\r\n\r\n}",
+							"raw": "{\r\n    \"name\" :\"Сотая новость\",\r\n    \"text\" : \"Вчера ночью я спал\",\r\n    \"categoryId\":2,\r\n    \"userId\":1\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"

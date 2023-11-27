@@ -8,6 +8,7 @@ import com.example.news.model.NewsFilter;
 import com.example.news.repository.NewsRepository;
 import com.example.news.repository.NewsSpecification;
 import com.example.news.service.NewsService;
+import com.example.news.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +26,7 @@ public class NewsImpl implements NewsService {
 
     private final NewsRepository newsRepository;
     private final CategoryImpl categoryImpl;
+    private final UserImpl userImpl;
 
     @Override
     public List<News> findAll(Pageable pageable) throws EntityNotFoundException {
@@ -42,6 +44,7 @@ public class NewsImpl implements NewsService {
         Category category = categoryImpl.findCategoryById(news.getCategory().getId());
         news.setCategory(category);
         category.getNews().add(news);
+        news.setUser(news.getUser());
         return newsRepository.save(news);
     }
 

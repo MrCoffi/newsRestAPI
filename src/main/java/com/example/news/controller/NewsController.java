@@ -1,5 +1,6 @@
 package com.example.news.controller;
 
+import com.example.news.entity.User;
 import com.example.news.exeption.EntityNotFoundException;
 import com.example.news.mapper.NewsMapper;
 import com.example.news.model.NewsFilter;
@@ -8,10 +9,12 @@ import com.example.news.model.response.News3Response;
 import com.example.news.model.response.NewsListResponse;
 import com.example.news.model.response.NewsResponse;
 import com.example.news.service.NewsService;
+import com.example.news.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.Optional;
 
 @RestController
@@ -58,6 +61,7 @@ public class NewsController {
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Optional<NewsResponse> getOneNews(@PathVariable Long id) {
+
         return Optional.ofNullable(Optional.of(newsMapper.newsToResponse(newsService.findById(id).orElseThrow()))
                 .orElseThrow(() -> new EntityNotFoundException("Не найдена новость")));
     }
